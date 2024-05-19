@@ -1,9 +1,13 @@
-import React from "react";
+import Footer from "./Footer";
+import Header from "./Header";
+import Menu from "./Menu";
 
 const App = () => {
   return (
-    <div>
-      <h1>Make React a Superpower Again.</h1>
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
 };
