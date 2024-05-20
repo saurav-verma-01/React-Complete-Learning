@@ -32,7 +32,7 @@ const App = () => {
         onDeleteItem={handleDeleteItem}
         onPacked={handlePackedStatus}
       />
-      <Stats />
+      <Stats items={items} />
     </div>
   );
 };
