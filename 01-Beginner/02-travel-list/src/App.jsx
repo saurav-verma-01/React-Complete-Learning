@@ -23,6 +23,14 @@ const App = () => {
     );
   };
 
+  const handleClearList = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to clear the list."
+    );
+
+    if (confirmed) setItems([]);
+  };
+
   return (
     <div className="app">
       <Header />
@@ -31,6 +39,7 @@ const App = () => {
         items={items}
         onDeleteItem={handleDeleteItem}
         onPacked={handlePackedStatus}
+        onClear={handleClearList}
       />
       <Stats items={items} />
     </div>

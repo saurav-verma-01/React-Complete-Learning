@@ -97,6 +97,16 @@ input {
   font-weight: 700;
   margin: 0 0.8rem;
 }
+.actions button {
+  background-color: #76c7ad;
+  color: aliceblue;
+  transition: all 0.2s ease-in-out;
+}
+
+.actions button:is(:active, :hover, :focus-visible) {
+  background-color: #36cb9c;
+  color: rgb(242, 245, 247);
+}
 
 .list ul {
   list-style: none;
