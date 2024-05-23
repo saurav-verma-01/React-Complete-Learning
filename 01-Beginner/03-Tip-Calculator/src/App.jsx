@@ -26,8 +26,12 @@ const App = () => {
       <PercentInput tip={friendsTip} onTipChange={setFriendsTip}>
         How did your friend like the service?
       </PercentInput>
-      <Results bill={bill} tip={tip} />
-      <ResetBtn onReset={handleReset} />
+      {bill && (
+        <>
+          <Results bill={bill} tip={tip} />
+          <ResetBtn onReset={handleReset} />
+        </>
+      )}
     </div>
   );
 };
