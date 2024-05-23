@@ -45,6 +45,20 @@ const App = () => {
     setShowAddForm(false);
   };
 
+  const handleSplitBillApp = (newBalance) => {
+    console.log(`New Balance is ${newBalance}`);
+
+    setList((prevList) =>
+      prevList.map((listItem) => {
+        if (listItem.id === selectedFriend.id) {
+          return { ...listItem, balance: listItem.balance + newBalance };
+        } else {
+          return listItem;
+        }
+      })
+    );
+  };
+
   return (
     <div className="app">
       <aside className="sidebar">
@@ -58,7 +72,12 @@ const App = () => {
           {showAddForm ? "Close" : "Add Friend"}
         </Button>
       </aside>
-      {selectedFriend && <FormSplitBill selectedFriend={selectedFriend} />}
+      {selectedFriend && (
+        <FormSplitBill
+          selectedFriend={selectedFriend}
+          onBillSplit={handleSplitBillApp}
+        />
+      )}
     </div>
   );
 };
