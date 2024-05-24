@@ -22,7 +22,7 @@ const Friend = ({ item, onSelect, selectedFriend }) => {
           {item.name} owes you ${Math.abs(item.balance)}
         </p>
       )}
-      {item.balance === 0 && <p>you and ${item.name} are even.</p>}
+      {item.balance === 0 && <p>you and {item.name} are even.</p>}
       <Button onClick={handleFreindSelection}>
         {isSelected ? "Close" : "Show"}
       </Button>

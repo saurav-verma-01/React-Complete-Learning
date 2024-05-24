@@ -23,6 +23,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--color-lightest);
 }
 
 .app {
@@ -31,6 +32,9 @@ body {
   grid-template-columns: 34rem 44rem;
   column-gap: 4rem;
   align-items: start;
+  border: 3px solid var(--color-medium);
+  padding: 2rem;
+  background-color: white;
 }
 
 .button {
