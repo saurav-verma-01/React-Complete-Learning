@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import Loader from "./components/Loader";
+import ErrorComp from "./components/ErrorComp";
 
 const tempMovieData = [
   {
@@ -57,14 +59,28 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const query = "spiderman";
 
   const fetchMovies = async () => {
-    setLoading(true);
-    const res = await fetch(`${URL}${query}`);
-    const data = await res.json();
-    setMovies(data.Search);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await fetch(`${URL}${query}sawe`);
+      // console.log("res -> ", res);
+      if (!res.ok)
+        throw new Error("Something went wrong while fetching Movies Data");
+      const data = await res.json();
+      // console.log(data);
+      if (data.Response === "False")
+        throw new Error("Movies Not Found with this query");
+      setMovies(data.Search);
+    } catch (err) {
+      console.error(err.message);
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -80,7 +96,9 @@ export default function App() {
       </NavBar>
       <Main>
         <Box>
-          <MoviesList movies={movies} />
+          {loading && <Loader />}
+          {!loading && !error && <MoviesList movies={movies} />}
+          {error && <ErrorComp message={error} />}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -117,7 +135,7 @@ const Input = () => {
   );
 };
 
-const NumResults = ({ movies }) => {
+const NumResults = ({ movies = [] }) => {
   return (
     <p className="num-results">
       Found <strong>{movies.length}</strong> results
