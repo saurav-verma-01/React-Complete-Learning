@@ -60,49 +60,75 @@ export default function App() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "spiderman";
+  const [query, setQuery] = useState("batman");
+  const [selectedId, setSelectedId] = useState(null);
 
-  const fetchMovies = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`${URL}${query}sawe`);
-      // console.log("res -> ", res);
-      if (!res.ok)
-        throw new Error("Something went wrong while fetching Movies Data");
-      const data = await res.json();
-      // console.log(data);
-      if (data.Response === "False")
-        throw new Error("Movies Not Found with this query");
-      setMovies(data.Search);
-    } catch (err) {
-      console.error(err.message);
-      console.error(err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  const handleSelectMovie = (id) => {
+    setSelectedId((prev) => (prev === id ? null : id));
+  };
+
+  const handleCloseMovie = () => {
+    setSelectedId(null);
   };
 
   useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await fetch(`${URL}${query}`);
+        // console.log("res -> ", res);
+        if (!res.ok)
+          throw new Error("Something went wrong while fetching Movies Data");
+        const data = await res.json();
+        // console.log(data);
+        if (data.Response === "False")
+          throw new Error("Movies Not Found with this query");
+        setMovies(data.Search);
+      } catch (err) {
+        console.error(err.message);
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (query.length < 3) {
+      setMovies([]);
+      setError("");
+      return;
+    }
     fetchMovies();
-  }, []);
+  }, [query]);
 
   return (
     <>
       <NavBar>
         <Logo />
-        <Input />
+        <Input query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
         <Box>
           {loading && <Loader />}
-          {!loading && !error && <MoviesList movies={movies} />}
+          {!loading && !error && (
+            <MoviesList movies={movies} onSelectMovie={handleSelectMovie} />
+          )}
           {error && <ErrorComp message={error} />}
         </Box>
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>
@@ -122,8 +148,7 @@ const Logo = () => {
   );
 };
 
-const Input = () => {
-  const [query, setQuery] = useState("");
+const Input = ({ query, setQuery }) => {
   return (
     <input
       className="search"
@@ -185,19 +210,23 @@ const WatchedBox = () => {
 };
 */
 
-const MoviesList = ({ movies }) => {
+const MoviesList = ({ movies, onSelectMovie }) => {
   return (
-    <ul className="list">
+    <ul className="list list-watched">
       {movies?.map((movie) => (
-        <MoviesListItem movie={movie} key={movie.imdbID} />
+        <MoviesListItem
+          movie={movie}
+          key={movie.imdbID}
+          onSelectMovie={onSelectMovie}
+        />
       ))}
     </ul>
   );
 };
 
-const MoviesListItem = ({ movie }) => {
+const MoviesListItem = ({ movie, onSelectMovie }) => {
   return (
-    <li>
+    <li onClick={() => onSelectMovie(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -207,6 +236,17 @@ const MoviesListItem = ({ movie }) => {
         </p>
       </div>
     </li>
+  );
+};
+
+const MovieDetails = ({ selectedId, onCloseMovie }) => {
+  return (
+    <div className="details">
+      <button className="btn-back" onClick={onCloseMovie}>
+        &larr;
+      </button>
+      {selectedId}
+    </div>
   );
 };
 
