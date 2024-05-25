@@ -19,16 +19,6 @@ const textStyle = {
   //   color: "orangered",
 };
 
-StarRating.propTypes = {
-  maxRating: PropTypes.number.isRequired,
-  defaultRating: PropTypes.number,
-  color: PropTypes.string,
-  size: PropTypes.number,
-  messages: PropTypes.array,
-  className: PropTypes.string,
-  setOutRating: PropTypes.func,
-};
-
 const StarRating = ({
   maxRating = 5,
   color = "#FFB20F",
@@ -116,6 +106,16 @@ const Star = ({ onRate, full, onHoverIn, onHoverOut, color, size }) => {
       )}
     </span>
   );
+};
+
+StarRating.propTypes = {
+  maxRating: PropTypes.number.isRequired,
+  defaultRating: PropTypes.number,
+  color: PropTypes.string,
+  size: PropTypes.number,
+  messages: PropTypes.array,
+  className: PropTypes.string,
+  setOutRating: PropTypes.func,
 };
 
 export default StarRating;
