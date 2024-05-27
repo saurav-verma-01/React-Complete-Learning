@@ -34,7 +34,7 @@ const StarRating = ({
   const handleRating = (newRate) => {
     setRating(newRate);
     if (setOutRating) {
-      setOutRating(newRate);
+      setOutRating(Number(newRate));
     } else {
       return;
     }
