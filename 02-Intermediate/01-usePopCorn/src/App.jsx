@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import ErrorComp from "./components/ErrorComp";
+import StarRating from "./StarRating";
 
 const tempMovieData = [
   {
@@ -50,7 +51,7 @@ const tempWatchedData = [
 ];
 
 const API_KEY = "d86a0de9";
-const URL = `http://www.omdbapi.com/?apikey=${API_KEY}&s=`;
+const URL = `http://www.omdbapi.com/?apikey=${API_KEY}&`;
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -76,7 +77,7 @@ export default function App() {
       try {
         setLoading(true);
         setError("");
-        const res = await fetch(`${URL}${query}`);
+        const res = await fetch(`${URL}s=${query}`);
         // console.log("res -> ", res);
         if (!res.ok)
           throw new Error("Something went wrong while fetching Movies Data");
@@ -240,12 +241,85 @@ const MoviesListItem = ({ movie, onSelectMovie }) => {
 };
 
 const MovieDetails = ({ selectedId, onCloseMovie }) => {
+  const [movie, setMovie] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
+
+  // console.table([
+  //   title,
+  //   year,
+  //   poster,
+  //   runtime,
+  //   imdbRating,
+  //   plot,
+  //   released,
+  //   actors,
+  //   director,
+  //   genre,
+  // ]);
+
+  useEffect(() => {
+    const getSelectedMovieDetails = async (selectedId) => {
+      setLoading(true);
+      const res = await fetch(`${URL}i=${selectedId}`);
+      const data = await res.json();
+      console.log(data);
+      setMovie(data);
+      setLoading(false);
+    };
+    getSelectedMovieDetails(selectedId);
+  }, [selectedId]);
+
   return (
     <div className="details">
-      <button className="btn-back" onClick={onCloseMovie}>
-        &larr;
-      </button>
-      {selectedId}
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back" onClick={onCloseMovie}>
+              &larr;
+            </button>
+            <img src={poster} alt={`Poster of ${title} movie.`} />
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>⭐</span> {imdbRating}
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              <StarRating maxRating={10} size={24} />
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>
+              Starring <strong>{actors}</strong>
+            </p>
+            <p>
+              Directed by <strong>{director}</strong>
+            </p>
+          </section>
+        </>
+      )}
     </div>
   );
 };
