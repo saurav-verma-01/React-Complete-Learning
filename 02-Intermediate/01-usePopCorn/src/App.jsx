@@ -61,7 +61,7 @@ export default function App() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("batman");
+  const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
   // console.log(watched);
@@ -83,11 +83,15 @@ export default function App() {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchMovies = async () => {
       try {
         setLoading(true);
         setError("");
-        const res = await fetch(`${URL}s=${query}`);
+        const res = await fetch(`${URL}s=${query}`, {
+          signal: controller.signal,
+        });
         // console.log("res -> ", res);
         if (!res.ok)
           throw new Error("Something went wrong while fetching Movies Data");
@@ -95,11 +99,16 @@ export default function App() {
         // console.log(data);
         if (data.Response === "False")
           throw new Error("Movies Not Found with this query");
+
         setMovies(data.Search);
+        setError("");
       } catch (err) {
         console.error(err.message);
         console.error(err);
-        setError(err.message);
+
+        if (err.name !== "AbortError") {
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -110,7 +119,13 @@ export default function App() {
       setError("");
       return;
     }
+
+    handleCloseMovie();
     fetchMovies();
+
+    return () => {
+      controller.abort();
+    };
   }, [query]);
 
   return (
@@ -274,6 +289,27 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddMovie, watched }) => {
     imdbID,
   } = movie;
 
+  useEffect(() => {
+    if (!movie) return;
+    document.title = `Movie | ${title}`;
+
+    return () => (document.title = "usePopCorn App");
+  }, [title, movie]);
+
+  useEffect(() => {
+    const callback = (e) => {
+      if (e.code === "Escape") {
+        onCloseMovie();
+      }
+    };
+
+    document.addEventListener("keydown", callback);
+
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, [onCloseMovie]);
+
   const isWatched = watched?.map((movie) => movie.imdbID)?.includes(selectedId);
   // const watchedUserRating = watched.filter((movie) => movie.imdbID === imdbID);
   const watchedUserRating = watched.find(
@@ -296,19 +332,19 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddMovie, watched }) => {
     onCloseMovie();
   };
 
-  console.table([
-    title,
-    year,
-    poster,
-    runtime,
-    imdbRating,
-    plot,
-    released,
-    actors,
-    director,
-    genre,
-    userRating,
-  ]);
+  // console.table([
+  //   title,
+  //   year,
+  //   poster,
+  //   runtime,
+  //   imdbRating,
+  //   plot,
+  //   released,
+  //   actors,
+  //   director,
+  //   genre,
+  //   userRating,
+  // ]);
 
   useEffect(() => {
     const getSelectedMovieDetails = async (selectedId) => {
