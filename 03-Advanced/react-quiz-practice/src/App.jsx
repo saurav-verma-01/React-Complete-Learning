@@ -5,12 +5,15 @@ import Error from "./Error";
 import MainContainer from "./MainContainer";
 import StartScreen from "./StartScreen";
 import Question from "./Question";
+import NextButton from "./components/NextButton";
 
 const initialState = {
   questions: [],
   // Statuses --> Loading..., Error..., Ready..., Active..., Finished
   status: "loading",
   index: 0,
+  answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -32,13 +35,29 @@ function reducer(state, action) {
         ...state,
         status: "start",
       };
+    case "newAnswer":
+      const question = state.questions[state.index];
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
+    case "nextQuestion":
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
+      };
   }
 }
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { status, questions, index } = state;
+  const { status, questions, index, answer } = state;
   const numberOfQuestions = questions.length;
 
   useEffect(() => {
@@ -47,6 +66,7 @@ const App = () => {
       .then((data) => dispatch({ type: "dataReceived", payload: data }))
       .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
+
   return (
     <div className="app">
       <Header />
@@ -56,7 +76,16 @@ const App = () => {
         {status === "ready" && (
           <StartScreen num={numberOfQuestions} dispatch={dispatch} />
         )}
-        {status === "start" && <Question question={questions[index]} />}
+        {status === "start" && (
+          <>
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+            <NextButton answer={answer} dispatch={dispatch} />
+          </>
+        )}
       </MainContainer>
     </div>
   );
