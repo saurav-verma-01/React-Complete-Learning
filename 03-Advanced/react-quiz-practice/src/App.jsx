@@ -6,6 +6,10 @@ import MainContainer from "./MainContainer";
 import StartScreen from "./StartScreen";
 import Question from "./Question";
 import NextButton from "./components/NextButton";
+import Progress from "./components/Progress";
+import FinishScreen from "./components/FinishScreen";
+import Timer from "./components/Timer";
+import Footer from "./components/Footer";
 
 const initialState = {
   questions: [],
@@ -14,8 +18,11 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  highscore: 0,
+  secondsRemaining: null,
 };
 
+const SECONDS_PER_QUESTION = 30;
 function reducer(state, action) {
   switch (action.type) {
     case "dataReceived":
@@ -34,6 +41,7 @@ function reducer(state, action) {
       return {
         ...state,
         status: "start",
+        secondsRemaining: state.questions.length * SECONDS_PER_QUESTION,
       };
     case "newAnswer":
       const question = state.questions[state.index];
@@ -51,14 +59,49 @@ function reducer(state, action) {
         index: state.index + 1,
         answer: null,
       };
+
+    case "finished":
+      return {
+        ...state,
+        status: "finished",
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
+
+    case "reset":
+      return {
+        ...state,
+        index: 0,
+        answer: null,
+        points: 0,
+        status: "ready",
+      };
+    case "tick":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
+      };
   }
 }
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { status, questions, index, answer } = state;
+  const {
+    status,
+    questions,
+    index,
+    answer,
+    points,
+    highscore,
+    secondsRemaining,
+  } = state;
   const numberOfQuestions = questions.length;
+  const maxPossiblePoints = questions.reduce(
+    (prev, cur) => prev + cur.points,
+    0
+  );
 
   useEffect(() => {
     fetch("http://localhost:3000/questions")
@@ -78,13 +121,38 @@ const App = () => {
         )}
         {status === "start" && (
           <>
+            <Progress
+              index={index}
+              num={numberOfQuestions}
+              points={points}
+              maxPoints={maxPossiblePoints}
+              answer={answer}
+            />
             <Question
               question={questions[index]}
               dispatch={dispatch}
               answer={answer}
             />
-            <NextButton answer={answer} dispatch={dispatch} />
+
+            <Footer>
+              <Timer dispatch={dispatch} seconds={secondsRemaining} />
+              <NextButton
+                answer={answer}
+                dispatch={dispatch}
+                index={index}
+                num={numberOfQuestions}
+              />
+            </Footer>
           </>
+        )}
+
+        {status === "finished" && (
+          <FinishScreen
+            points={points}
+            maxPoints={maxPossiblePoints}
+            highscore={highscore}
+            dispatch={dispatch}
+          />
         )}
       </MainContainer>
     </div>
