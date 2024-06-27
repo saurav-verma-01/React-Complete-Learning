@@ -1,9 +1,12 @@
+import Map from "../components/Map";
+import Sidebar from "../components/Sidebar";
 import styles from "./AppLayout.module.css";
 
 const AppLayout = () => {
   return (
     <div className={styles.app}>
-      <h1>App Layout</h1>
+      <Sidebar />
+      <Map />
     </div>
   );
 };
