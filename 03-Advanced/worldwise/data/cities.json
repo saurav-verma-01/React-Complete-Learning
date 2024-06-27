@@ -1,40 +1,124 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
+      "cityName": "Tokyo",
+      "country": "Japan",
+      "emoji": "🇯🇵",
       "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
+      "notes": "Vibrant and bustling city with a mix of tradition and modernity.",
       "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
+        "lat": 35.6895,
+        "lng": 139.6917
       },
-      "id": 73930385
+      "id": 1
     },
     {
-      "cityName": "Madrid",
+      "cityName": "Paris",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "The city of love with iconic landmarks like the Eiffel Tower.",
+      "position": {
+        "lat": 48.8566,
+        "lng": 2.3522
+      },
+      "id": 2
+    },
+    {
+      "cityName": "New York",
+      "country": "USA",
+      "emoji": "🇺🇸",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "The city that never sleeps, known for its skyline and cultural diversity.",
+      "position": {
+        "lat": 40.7128,
+        "lng": -74.006
+      },
+      "id": 3
+    },
+    {
+      "cityName": "Rome",
+      "country": "Italy",
+      "emoji": "🇮🇹",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "Rich in history and home to the Colosseum and Vatican City.",
+      "position": {
+        "lat": 41.9028,
+        "lng": 12.4964
+      },
+      "id": 4
+    },
+    {
+      "cityName": "London",
+      "country": "United Kingdom",
+      "emoji": "🇬🇧",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "A global city with a rich history, modern attractions, and diverse culture.",
+      "position": {
+        "lat": 51.5074,
+        "lng": -0.1278
+      },
+      "id": 5
+    },
+    {
+      "cityName": "Barcelona",
       "country": "Spain",
       "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
-      "notes": "",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "Famous for its art and architecture, especially the works of Gaudí.",
       "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
+        "lat": 41.3851,
+        "lng": 2.1734
       },
-      "id": 17806751
+      "id": 6
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "cityName": "Dubai",
+      "country": "UAE",
+      "emoji": "🇦🇪",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "Known for luxury shopping, ultramodern architecture, and a lively nightlife scene.",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
+        "lat": 25.2048,
+        "lng": 55.2708
       },
-      "id": 98443197
+      "id": 7
+    },
+    {
+      "cityName": "Bangkok",
+      "country": "Thailand",
+      "emoji": "🇹🇭",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "A city of contrasts with ornate temples and vibrant street life.",
+      "position": {
+        "lat": 13.7563,
+        "lng": 100.5018
+      },
+      "id": 8
+    },
+    {
+      "cityName": "Sydney",
+      "country": "Australia",
+      "emoji": "🇦🇺",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "Known for its Sydney Opera House, Harbour Bridge, and beautiful beaches.",
+      "position": {
+        "lat": -33.8688,
+        "lng": 151.2093
+      },
+      "id": 9
+    },
+    {
+      "cityName": "Cape Town",
+      "country": "South Africa",
+      "emoji": "🇿🇦",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "Known for its harbor, Table Mountain, and rich history.",
+      "position": {
+        "lat": -33.9249,
+        "lng": 18.4241
+      },
+      "id": 10
     }
   ]
 }

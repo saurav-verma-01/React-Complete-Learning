@@ -1,4 +1,3 @@
-// import React from "react";
 import CityItem from "./CityItem";
 import styles from "./CityList.module.css";
 import Spinner from "./Spinner";
